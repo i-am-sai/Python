@@ -1,35 +1,19 @@
-a = 89
-print(a)
-print(type(a))
 
-b = 89.4324
-print(type(b))
+ports_scanned = {22, 80, 443, 22, 80, 22}
+print(ports_scanned)
 
-c = "Heeeeee"
-print(type(c))
-print(c.count("e"))
-print(len(c))
+#Set Operations: Powerful for Network Analysis
+server_a_ports = {22, 80, 443, 8080}
+server_b_ports = {22, 443, 3306, 5432}
 
-d = "Babes"
+# Union — all ports across both servers
+print(server_a_ports | server_b_ports)
 
-print(c +" " + d)
-print(f"{a} is a number")
-print(c.upper())
+# Intersection — ports open on BOTH servers
+print(server_a_ports & server_b_ports)
 
-text = str(123) # int to string
-print(type(text))
-print(text + " " + "is")
+# Difference — ports only on server A, not B
+print(server_a_ports - server_b_ports)
 
-NUM = int(3.14)
-print(type(NUM))
-print(NUM + 3)  
-
-num1 = 11
-num2 = 3
-
-print(num1 + num2)
-print(num1/num2) # floor division, decimal value
-print(num1//num2) # floor division, rounds down to nearest whole number
-print(num1%num2) # modulus give reminder
-print(num1**num2) # exponentiation, num1 to the power of num2
-
+# Difference — ports only on server B, not A
+print(server_b_ports - server_a_ports)

@@ -97,7 +97,3 @@ elif age==18:
     print("Teen")
 else:
     print("Minor")
-
-
-
-

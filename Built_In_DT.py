@@ -22,6 +22,7 @@ print(hosts[:3])
 print(hosts[::2])
 
 # Modify the lists
+# Functions: append, insert, remove, pop, sort, reverse, len, in, enumerate  
 hosts.append("192.168.1.6")
 print(hosts)
 
@@ -58,7 +59,7 @@ for index, host in enumerate(hosts):
     print(f"Host {index +1}: {host}")
 
     # List  Comprehension
-    hosts = ["192.168.1.1", "10.0.0.1", "192.168.1.2", "172.16.0.1"]
+hosts = ["192.168.1.1", "10.0.0.1", "192.168.1.2", "172.16.0.1"]
 filtered = [host for host in hosts if host.startswith("192")]
 print(filtered)
 # One line. Read it like English — "give me each host, for each host in hosts, if it starts with 192."

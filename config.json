@@ -1,0 +1,5 @@
+{
+    "base_url": "https://aha-ebooks.example.com",
+    "timeout": 30,
+    "browser": "chromium"
+}
