@@ -9,7 +9,9 @@ class ReaderPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
         self.epub_frame = page.frame_locator('iframe[title="EPUB Book Content"]')
-        self.toc_button = page.get_by_role("button", name="table of contents")
+        self.toc_button = page.get_by_role("button", name="table of contents")  
+        # self.title_heading = page.get_by_role("heading", name="Advanced Cardiovascular Life Support Provider Manual")
+        # self.title_heading = page.get_by_role("heading", name="Advanced Cardiovascular Life")
         self.title_heading = page.get_by_role("heading",name="Basic Life Support Instructor")
         self.back_to_shelf = page.get_by_role("button",name="back to shelf")
         # self.chapter_name = page.get_by_role("link", name="Part 2: Preparing for the")

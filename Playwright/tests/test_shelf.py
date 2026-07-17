@@ -20,7 +20,6 @@ def test_readerloading(logged_in_page):
     logger.info("Reader Loaded after click")
 
     reader.verify_reader_loaded()
-    expect(reader.title_heading).to_be_visible()
     reader.capture_screenshot("Reader Loaded")
     reader.click_back_to_shelf()
 

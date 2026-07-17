@@ -1,15 +1,20 @@
 import pytest
 import shutil
+from pathlib import Path
 from playwright.sync_api import expect
 from pages.login_page import LoginPage
 from utils.config_reader import ConfigReader
+from utils.screenshot_helper import take_screenshot
 from utils.logger import logger
+import base64
+from pytest_html import extras
 
 @pytest.fixture(scope="session", autouse=True)
 def clean_reports():
     shutil.rmtree("reports/screenshots", ignore_errors=True)
     # shutil.rmtree("reports/logs", ignore_errors=True)
     yield
+
 
 @pytest.fixture(scope="session")
 def authenticated_state(browser):
@@ -34,7 +39,7 @@ def authenticated_state(browser):
     page.wait_for_load_state("networkidle")
     
     cookies = context.cookies()
-    auth_cookie = next((c for c in cookies if c["name"] == "SimpleSAMLAuthToken"), None)
+    auth_cookie = next((c for c in cookies if c["name"] == "SimpleSAMLAuthToken"), None) # List Comphrension
 
     if not auth_cookie:
         raise Exception(
@@ -57,8 +62,40 @@ def logged_in_page(browser, authenticated_state):
     context.close()
 
 
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
 
+    if report.when == "call" and report.failed:
+        page = item.funcargs.get("logged_in_page")
+        if page:
+            try: 
+                screenshot_name = f"{item.name}_FAILURE"
+                take_screenshot(page, screenshot_name)  # reuses your existing function
 
+                screenshot_path = Path("reports/screenshots") / f"{screenshot_name}.png"
+            # with open(screenshot_path, "rb") as f:
+            #     screenshot_bytes = f.read()
+
+            # if not hasattr(report, "extra"):
+            #     report.extra = []
+            # report.extra.append(extras.image(screenshot_bytes, mime_type="image/png"))
+
+            # logger.info(f"Failure screenshot saved and attached: {screenshot_path}")
+                if screenshot_path.exists():
+                        with open(screenshot_path, "rb") as f:
+                            screenshot_bytes = f.read()
+
+                    # pytest-html (self-contained mode) needs base64 STRING, not raw bytes
+                        encoded_screenshot = base64.b64encode(screenshot_bytes).decode("utf-8")
+
+                        report.extras = getattr(report, "extras", [])
+                        report.extras.append(extras.image(encoded_screenshot, mime_type="image/png"))
+
+                logger.info(f"Failure screenshot saved and attached: {screenshot_path}")
+            except Exception as e:
+                logger.warning(f"Failed to capture/attach failure screenshot: {e}")
 
 
 
@@ -80,5 +117,13 @@ def logged_in_page(browser, authenticated_state):
 # browser
 # context
 # page
+
+
+
+
+
+
+
+
 
 

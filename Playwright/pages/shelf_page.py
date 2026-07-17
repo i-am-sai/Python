@@ -12,18 +12,17 @@ class ShelfPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
         config = ConfigReader()
-        self.default_shelf = page.get_by_role("button", name="bookshelf; Default Shelf;")
-        # self.read_online_button = page.get_by_role("button", name="Read Online").and_(page.locator('[data-product="944"]'))
+        self.automation_shelf = page.get_by_role("button", name="bookshelf; Automation Testing")
+        #  self.default_shelf = page.get_by_role("button", name="bookshelf; Automation Testing")        Need to change locator for default shelf
         self.read_online_button = page.locator('a[href="/epubreader/basic-life-support-instructor-manual"][aria-label="Read Online"]')
-        self.read_online_button1 = page.locator('a[href="/epubreader/advanced-cardiovascular-life-support-provider-manual-ebook50194216"][aria-label="Read Online"]')
+        # self.read_online_button = page.locator('a[href="/epubreader/acls-provider-manual-ebook-individual"][aria-label="Read Online"]')
         self.title_heading = page.get_by_role("heading",name="Basic Life Support Instructor")
-        self.title_heading1 = page.get_by_role("heading",name="Advanced Cardiovascular Life Support Provider Manual")
-       
+        # self.title_heading = page.get_by_role("heading", name="Advanced Cardiovascular Life")
         
 
     def open_bookshelf(self):
         logger.info("Opening Bookshelf")
-        self.default_shelf.click()
+        self.automation_shelf.click()
 
     def click_read_online(self):
         self.capture_screenshot("shelf_before_scroll")
