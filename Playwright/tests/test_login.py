@@ -18,12 +18,11 @@ def test_logout(logged_in_page):
     logger.info("Successfully Logged In")
     login_page.click_usermenu()
     login_page.capture_screenshot("about_to_logout")
-    # login_page.click_logout()
+    login_page.click_logout()
     login_page.capture_screenshot("after_logout")
 
     # Pending: Logout Assertion
-    # expect(login_page.login_link).to_be_visible() 
-    # expect(logged_in_page).not_to_have_url(config.get("base_url"))
+    expect(login_page.login_link).to_be_visible() or expect(logged_in_page).not_to_have_url(config.get("base_url"))
     
     logger.info("Successfully Logged Out")
 
