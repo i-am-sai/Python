@@ -1,22 +1,27 @@
+from logging import config
+import playwright
 import pytest
 import shutil
+import base64
 from pathlib import Path
 from playwright.sync_api import expect
+from playwright.sync_api import sync_playwright
 from pages.login_page import LoginPage
+from pages.shelf_page import ShelfPage
+from pages.annotation_page import AnnotationPage
 from utils.config_reader import ConfigReader
 from utils.screenshot_helper import take_screenshot
 from utils.logger import logger
-import base64
 from pytest_html import extras
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="session", autouse=True)  # Fixture to clear screenshots before starring each session
 def clean_reports():
     shutil.rmtree("reports/screenshots", ignore_errors=True)
     # shutil.rmtree("reports/logs", ignore_errors=True)
     yield
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="session") # Fixture for storing authentication state for a every session
 def authenticated_state(browser):
     config = ConfigReader()
     context = browser.new_context()
@@ -52,17 +57,34 @@ def authenticated_state(browser):
     context.close()
     return state
 
-@pytest.fixture
+@pytest.fixture    # Fixture that maintains the logged in state of the site and returns raw playwright page object
 def logged_in_page(browser, authenticated_state):
     config = ConfigReader()
     context = browser.new_context(storage_state="reports/.auth/auth_state.json")
+    context.tracing.start(
+      screenshots=True,
+        snapshots=True,        sources=True     )
     page = context.new_page()
     page.goto(config.get("bookshelf_url"))
     yield page
+
+    context.tracing.stop(
+        path="reports/traces/trace.zip"
+    )
     context.close()
 
+# @pytest.fixture
+# def logged_in_page(browser, playwright, authenticated_state):
+#     config = ConfigReader()
+#     pixel_7 = playwright.devices["Pixel 7"]
+#     context = browser.new_context(storage_state="reports/.auth/auth_state.json", **pixel_7)
+#     page = context.new_page()
+#     page.goto(config.get("bookshelf_url"))
+#     yield page
+#     context.close()
 
-@pytest.hookimpl(hookwrapper=True)
+
+@pytest.hookimpl(hookwrapper=True) # Hook to generate reports 
 def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
@@ -75,14 +97,6 @@ def pytest_runtest_makereport(item, call):
                 take_screenshot(page, screenshot_name)  # reuses your existing function
 
                 screenshot_path = Path("reports/screenshots") / f"{screenshot_name}.png"
-            # with open(screenshot_path, "rb") as f:
-            #     screenshot_bytes = f.read()
-
-            # if not hasattr(report, "extra"):
-            #     report.extra = []
-            # report.extra.append(extras.image(screenshot_bytes, mime_type="image/png"))
-
-            # logger.info(f"Failure screenshot saved and attached: {screenshot_path}")
                 if screenshot_path.exists():
                         with open(screenshot_path, "rb") as f:
                             screenshot_bytes = f.read()
@@ -97,10 +111,38 @@ def pytest_runtest_makereport(item, call):
             except Exception as e:
                 logger.warning(f"Failed to capture/attach failure screenshot: {e}")
 
+# logged_in_page: is already the real Playwright page, not a wrapper object.
+# It is already a: page = context.new_page() and not logged_in_page.page
 
+@pytest.fixture       # Fixture to load reader from shelf after login with already authenticated state.
+def reader_on_chapter(logged_in_page):
+    """
+    Navigates from bookshelf -> reader -> opens TOC -> lands on a specific chapter.
+    Returns a ready-to-use ReaderPage positioned on that chapter, so annotation/
+    highlight tests can start directly from content interaction without repeating
+    navigation steps.
+    """
+    shelf = ShelfPage(logged_in_page)
+    shelf.capture_screenshot("New State after Login")
+    shelf.open_bookshelf()
 
+    reader = shelf.click_read_online()
+    reader.verify_reader_loaded()
+    reader.capture_screenshot("Reader Loaded")
 
+    reader.open_table_of_contents()
+    reader.capture_screenshot("TOC Loaded")
+    reader.click_toc_chapter("Part 4")
+    reader.capture_screenshot("TOC Chapter 4 Loaded")
+    reader.verify_chapter_heading("Testing")
+    # reader.verify_chapter_content("aha1418")
+    # logger.info("Chapter content 1418 present ")
 
+    return reader
+
+@pytest.fixture
+def annotation_page(reader_on_chapter):
+    return AnnotationPage(reader_on_chapter.page)
 
 
 # import shutil — Python's built-in module for higher-level file operations; os can delete single files, but shutil is what you use for deleting entire folders and their contents at once.
@@ -118,12 +160,38 @@ def pytest_runtest_makereport(item, call):
 # context
 # page
 
+# Why return AnnotationPage(reader_on_chapter.page)
+# Here:
+
+# reader_on_chapter is a page object instance of ReaderPage.
+
+# So:
+
+# reader_on_chapter is not the raw browser page
+# it is an object that wraps a Playwright page
+# reader_on_chapter.page means: “give me the underlying Playwright Page inside that reader object”
 
 
 
+# You have two layers:
+
+# Page Object layer
+
+# ReaderPage
+# AnnotationPage
+# Playwright browser layer
+
+# the actual Page object
+# reader_on_chapter = object representing the reader page
+# reader_on_chapter.page = the real browser page inside that object
+
+# so, both points to same browser page context
+# reader_on_chapter.page
+# annotation_page.page
 
 
+# So:
 
-
-
-
+# the browser page is reused for the test session
+# but each test gets its own fresh fixture-created page object instance
+# the underlying browser page is still the same logged-in page context for that fixture lifecycle

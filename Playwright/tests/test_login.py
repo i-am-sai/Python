@@ -1,4 +1,3 @@
-import re
 import pytest
 from playwright.sync_api import expect
 from pages.login_page import LoginPage
@@ -12,7 +11,9 @@ from utils.logger import logger
 def test_logout(logged_in_page):
     config = ConfigReader()
     login_page = LoginPage(logged_in_page)
-    
+
+    logger.info("\nTest Case 3: Logging Out")    
+
     logged_in_page.goto(config.get("bookshelf_url"))
     login_page.capture_screenshot("after_login")
     logger.info("Successfully Logged In")
@@ -20,11 +21,10 @@ def test_logout(logged_in_page):
     login_page.capture_screenshot("about_to_logout")
     login_page.click_logout()
     login_page.capture_screenshot("after_logout")
-
-    # Pending: Logout Assertion
-    expect(login_page.login_link).to_be_visible() or expect(logged_in_page).not_to_have_url(config.get("base_url"))
-    
+    login_page.verify_logged_out
     logger.info("Successfully Logged Out")
+    # Pending: Logout Assertion
+
 
 
 

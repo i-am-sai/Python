@@ -7,6 +7,9 @@ from utils.logger import logger
 
 def test_toc_navigation(logged_in_page):
     shelf = ShelfPage(logged_in_page)
+
+    logger.info("\nTest Case 1: Chapter Navigation Verified")    
+
     shelf.capture_screenshot("New State after Login")
     shelf.open_bookshelf()
     reader = shelf.click_read_online()

@@ -16,7 +16,6 @@ utils/screenshot_helper.py
 -> A reusable helper function independent of any test or page.
 -> Playwright provides page.screenshot(). Wrap it in a helper if multiple tests use the same logic.
 
-
 pages/base_page.py
 -> Provide common functionality that every page object can reuse. Inheritance — all page classes inherit from BasePage.
 
@@ -25,17 +24,6 @@ tests/conftest.py
 -> A special pytest file that provides reusable setup and teardown.
 -> Avoid duplicate setup code. Share browser/page/login fixtures. Pytest discovers it automatically.
 -> Keep reusable fixtures in conftest.py. Pytest automatically makes them available to all tests in that folder.
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -48,9 +36,7 @@ Every .py file with standalone reusable functions/classes is a module. You'll im
 Any folder grouping related modules becomes a package, letting you write clean imports like from pages.login_page import LoginPage instead of one giant messy file.
 
 3. Utility classes (utils/logger.py, utils/config_reader.py, utils/screenshot_helper.py)
-his is same as modules but wrapped in a class instead of loose functions used when reusable logic needs to hold onto some state (data that persists across multiple calls) rather than just running one calculation and returning.
-
-4. Logging (utils/logger.py) — wraps the logging module you learned, reused by every test/page object.
+This is same as modules but wrapped in a class instead of loose functions used when reusable logic needs to hold onto some state (data that persists across multiple calls) rather than just running one calculation and returning.
 
 5. Exception Handling — lives inside pages/*.py methods (catching Playwright timeouts) and inside utils/config_reader.py (catching bad JSON/missing files).
 

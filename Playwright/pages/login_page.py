@@ -1,3 +1,4 @@
+from playwright.sync_api import expect
 from pages.base_page import BasePage
 from utils.logger import logger
 from utils.config_reader import ConfigReader
@@ -6,7 +7,8 @@ class LoginPage(BasePage):
 
     def __init__(self, page):
         super().__init__(page) ## runs BasePage.__init__, sets self.page and self.accept_cookies_button
-        config = ConfigReader()
+        
+        config = ConfigReader() # object
         self.login_link = page.get_by_role("link", name="Login")
         self.username_field = page.get_by_role("textbox", name="Username / Email")
         self.password_field = page.get_by_role("textbox", name="Password")
@@ -31,7 +33,7 @@ class LoginPage(BasePage):
         logger.info("Clicking Sign In")
         self.signin_button.click()
     
-    def login(self, username, password):
+    def login(self, username, password): # Login Complete flow
         self.click_login()
         self.enter_credentials(username, password)
         self.click_signin()
@@ -44,8 +46,14 @@ class LoginPage(BasePage):
         logger.info("Clicked Log Out")
         self.logout_link.click()
     
-    def logout(self):
+    def logout(self):   # Logout Complete flow
         logger.info("Clicked User Menu")
-        self.usermenu_field.click()
-        self.logout_link.click()
+        self.click_usermenu()
+        self.click_logout()
+
+    def verify_logged_out(self, timeout: int = 10000):
+        logger.info("Verifying logout completed")
+        expect(self.login_link).to_be_visible(timeout=timeout)
+        logger.info("Logout confirmed — login link visible")
+
 

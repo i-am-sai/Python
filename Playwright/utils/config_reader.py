@@ -1,6 +1,6 @@
 import json # reads json file
 import os   # reads env variables
-from dotenv import load_dotenv # Loads variables from .env.
+from dotenv import load_dotenv # Loads variables from .env file
 
 load_dotenv() # run once when this file is imported and it loads .env file so every other file can access them
 

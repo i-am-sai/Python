@@ -4,22 +4,22 @@ from utils.logger import logger
 class BasePage:
     def __init__(self, page): # Constructor, page → Playwright Page object.
         self.page = page # Stores the page so every method can use it.
-        self.accept_cookies_button = page.locator("#onetrust-accept-btn-handler")
+        self.accept_cookies_button = page.locator("#onetrust-accept-btn-handler") # Locator for accept cookies pop up
 
 
-    def navigate(self, url):
+    def navigate(self, url): # Method to navigate to particulat url
         self.page.goto(url)
 
-    def accept_cookies(self):
+    def accept_cookies(self): # Method to accept cookies when popped up
         try:
             self.accept_cookies_button.click(timeout=5000)
         except Exception:
             pass  # banner didn't appear, nothing to do
     
-    def capture_screenshot(self, name): # Generic method available to every page.
+    def capture_screenshot(self, name): # Generic screenshot method available to every page.
         take_screenshot(self.page, name)
 
-    def scroll_infinite_page(self, locator, max_attempts=30, scroll_amount=1000):
+    def scroll_infinite_page(self, locator, max_attempts=30, scroll_amount=1000): # To Scroll till element is visible for actions
         previous_height = 0
 
         for attempt in range(max_attempts):
@@ -43,7 +43,7 @@ class BasePage:
             f"Final page height: {previous_height}"
         )
 
-#✅ Keep only generic methods here.
+# ✅ Keep only generic methods here.
 # ✅ All page classes should inherit BasePage.
 # ✅ Reuse helpers instead of duplicating code.
 
