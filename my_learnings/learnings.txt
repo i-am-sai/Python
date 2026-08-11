@@ -1,0 +1,33 @@
+# Virtual Environment:
+# Consider I am linux and create a virtual environment named learning to study older version of python2 
+# and if I create that in my OS and kept it in a particular folder and when I activate that vnev it will
+# consume the shared computer resources and start behaving as a isolated machine where we install only old python2.
+# If there is python3 in Linux that will not run the code what I wrote inside this venv the local python2 will run the code.
+#Major advantage is version conflict of diff library for different purpose and porjects.
+
+
+# python3 -m venv Learning-> command to create a venv 
+# source Learning/bin/activate -> the python2 interpreter located in bin of Learning will be activated and execute  the script
+# Doubts: Each word in command role and definition
+
+# Python 1: data types, conditionals, loops, String and basics
+# Python has 4 built in data Structures: lists, tupples, sets and Dictionaries
+# Functions and Decorators (Fixtures use this conepts)
+# Esception handling: try, except, raise, finally
+# Common Error inbuilt classes:  ValueError AttributeError, ZeroDivisionError
+# File Handling and navigation: pathlib and os libraries ?
+# Built in Libraries: os, datatime, sys, pathlib
+# Parsing and storing data
+
+
+#OOPS
+# OOPS: One way of programming approach which means Object Oriented Programming Language.
+# Where it resolves around objects and its attributes and rest all concepts/functionalities revolves around those.
+asfasffaf
+
+gaps:
+1. file_creation with date and time implementation
+2. OOPS: clear understanding
+3. pytest concepts to be familiar
+
+Then Netowrking

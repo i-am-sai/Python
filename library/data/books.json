@@ -1,0 +1,19 @@
+{
+    "books": [
+        {
+            "book_id": 1,
+            "title": "Why I am an Athiest",
+            "author": "Bhagath Singh"
+        },
+        {
+            "book_id": 2,
+            "title": "Sapiens",
+            "author": "Yuval Nova Harari"
+        },
+        {
+            "book_id": 6,
+            "title": "fds",
+            "author": "3"
+        }
+    ]
+}
