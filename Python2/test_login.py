@@ -1,4 +1,4 @@
-from utils import format_timestamp, load_config
+from Python2.utils import format_timestamp, load_config
 
 config = load_config()
 timestamp = format_timestamp()

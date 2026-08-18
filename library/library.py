@@ -1,4 +1,4 @@
-from utils import Logger
+from Python2.utils import Logger
 from exceptions import LibraryError, BookNotFoundError, MemberNotFoundError, BookAlreadyCheckedOutError, BookNotCheckedOutError
 from models import Book, Member
 
