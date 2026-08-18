@@ -14,7 +14,6 @@ print(data["base_url"])
 #Note: once loads, data is just a normal python dict. You access it exactly like any dict no json syntac needed after loading.
 
 # writing python data to json
-
 test_result = {
     "test_type": "Sanity",
     "no_of_TC": "18",

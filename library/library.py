@@ -1,6 +1,9 @@
 from Python2.utils import Logger
 from exceptions import LibraryError, BookNotFoundError, MemberNotFoundError, BookAlreadyCheckedOutError, BookNotCheckedOutError
 from models import Book, Member
+import json
+from datetime import datetime
+from utils import logger
 
 class Library:
     def __init__(self):
@@ -8,10 +11,34 @@ class Library:
         self.members = [] # stores all members
         self.logger = Logger() # record library actions
 
+        
+
+
+
     def add_book(self, book):
         self.books.append(book)
-        self.logger.info(f"Book added: {book.title}")
+        logger.info(f"Book added: {book.title}")
         
+
+    def save_book(self):
+        # data = {
+        #     "books": [book.to_dict() for book in self.books]
+        # }
+        book_list = []
+        for book in self.books:
+            book_list.append(book.to_dict())
+
+        data = {
+         "books": book_list
+         }
+        # filename = datetime.now().strftime("books_%Y%m%d_%H%M%S.json")
+        with open("data/books.json", "w") as file:
+                    json.dump(data, file, indent=4)
+
+        # with open("data/books.json", "w") as file:
+        #     json.dump(data, file, indent=4)
+
+
     
     def add_member(self, member):
         self.members.append(member)
@@ -78,15 +105,3 @@ class Library:
     def find_book_by_title(self, title):
         return [book for book in self.books if book.title.lower() == title.lower()]
 
-# lib = Library()
-
-# b1 = Book(1, "Sapiens", "Nova")
-# m1 = Member(1, "Sai")
-
-# lib.add_book(b1)
-# lib.add_member(m1)
-
-# lib.checkout_book(1, 1)          # should succeed, print an info log
-# print(lib.list_checked_out_books())   # should show b1
-
-# lib.checkout_book(1, 1)          # should raise BookAlreadyCheckedOutError — let it crash, read the traceback

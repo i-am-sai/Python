@@ -42,6 +42,25 @@ try:
 except BookAlreadyCheckedOutError as e:
     print(f"Handled error: {e}")
 
+results = library.find_book_by_title("Sapiens")
+print(results)
+print(type(results))
+
+# print(results.title) # Attribute error
+
+# results = library.find_book_by_title("Nonexistent Book")
+# print(results)          # should show []
+# print(results[0])       # should raise IndexError
+
+#if results: works because an empty list is falsy in Python, and a non-empty list is truthy — so this single check protects you from both the empty-list
+results = library.find_book_by_title("I am an Athiest")
+if results:
+    print(results[0].title)
+else:
+    print("No book found with that title")
+
+
+
 # try:
 #     library.return_book(2,2)
 # except BookNotCheckedOutError as e:
@@ -61,25 +80,6 @@ except BookAlreadyCheckedOutError as e:
 #     library.checkout_book(43, 43)
 # except LibraryError as e:
 #     print(f"Edge Case")
-
-results = library.find_book_by_title("Sapiens")
-print(results)
-print(type(results))
-
-# print(results.title) # Attribute error
-
-# results = library.find_book_by_title("Nonexistent Book")
-# print(results)          # should show []
-# print(results[0])       # should raise IndexError
-
-#if results: works because an empty list is falsy in Python, and a non-empty list is truthy — so this single check protects you from both the empty-list
-results = library.find_book_by_title("I am an Athiest")
-if results:
-    print(results[0].title)
-else:
-    print("No book found with that title")
-
-
 
 
 
