@@ -1,4 +1,0 @@
-python-dotenv
-allure-pytest
-pytest-html
-shutil

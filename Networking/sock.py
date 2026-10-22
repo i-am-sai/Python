@@ -1,8 +1,22 @@
-# TCP connection — explicit, reliable
 import socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # SOCK_STREAM = TCP
-sock.connect(("192.168.1.1", 22))    # 3-way handshake happens here
+import time
 
-# UDP connection — fire and forget
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)   # SOCK_DGRAM = UDP
-sock.sendto(data, ("8.8.8.8", 53))  # DNS query — no handshake
+host = "www.github.com"
+port = 443 #https connection
+
+start = time.time()
+ip = socket.gethostbyname(host)
+dns_time = time.time() - start
+
+start = time.time()
+sock = socket.create_connection((ip, port), timeout=5)
+connect_time = time.time() - start  
+sock.close()
+
+print(f"Resolved {host} -> {ip}")
+print(f"DNS time: {dns_time} seconds")
+print(f"DNS Lookup time: {dns_time*1000:.2f} ms")
+print(f"TCP connect time: {connect_time*1000:.2f} ms")
+# print(f"Local address/port: {sock.getsockname()}")
+# print(f"Remote address/port: {sock.getpeername()}")
+

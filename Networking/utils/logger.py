@@ -12,8 +12,3 @@ if not logger.handlers:
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
 
-
-
-
-
-

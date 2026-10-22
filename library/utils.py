@@ -1,7 +1,6 @@
 from pathlib import Path
 import logging
 
-
 class Logger:
     # def __init__(self, path):
     #     self.path = path
