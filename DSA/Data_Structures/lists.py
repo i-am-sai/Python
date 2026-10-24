@@ -17,13 +17,16 @@ print(len(list1))
 
 #Algorithms: Sometimes we want to perform actions that are not built into Python.
 # Prob1:The lowest value in a list
-list1=[102,4,1,5,8,2,44,96]
+list2=[102,4,1,5,8,2,44,96]
 
-min_Var = list1[0]
+min_Var = list2[0]
 
-for i in list1:
+for i in list2:
     if i < min_Var:
         min_Var = i
 print("Lowest Value:", min_Var)
 
+merged = list1 + list2
+print(merged)
+print(len(merged))
 
